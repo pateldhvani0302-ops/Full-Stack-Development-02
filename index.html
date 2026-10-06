@@ -3,48 +3,117 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    
+    <title>Vue.js Pet Depot</title>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 2rem;
+            background: #f7f7f7;
+            color: #1f2937;
+        }
+
+        #app {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #fff;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .product-layout {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .product-image {
+            max-width: 300px;
+            border-radius: 8px;
+        }
+
+        .cart-summary {
+            margin-top: 1.5rem;
+            font-weight: 600;
+        }
+
+        button {
+            padding: 0.7rem 1.2rem;
+            border: none;
+            border-radius: 6px;
+            background: #2563eb;
+            color: #fff;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        button:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+        }
+    </style>
 </head>
 <body>
-
     <div id="app">
-        <h1 v-text = "sitename"></h1>
-        <figure>
-            <img v-bind:src="product.image" width = 300>
-        </figure>
-        <h2 v-text="product.title"></h2>
-        <p v-text="product.description"></p>
-        <p>Price: £{{product.price}}</p>
+        <h1 v-text="sitename"></h1>
+        <div class="product-layout">
+            <figure>
+                <img class="product-image" v-bind:src="product.image" alt="Product image">
+            </figure>
+            <div>
+                <h2 v-text="product.title"></h2>
+                <p v-text="product.description"></p>
+                <p>Price: £{{ product.price / 100 }}</p>
+                <p>Available inventory: {{ product.availableInventory }}</p>
+                <button v-on:click="addToCart" v-bind:disabled="product.availableInventory === 0">
+                    {{ product.availableInventory === 0 ? 'Sold out' : 'Add to cart' }}
+                </button>
+            </div>
+        </div>
+        <div class="cart-summary">
+            <p>Cart items: {{ cartCount }}</p>
+            <p>Cart total: £{{ cartTotal / 100 }}</p>
+        </div>
     </div>
 
     <script type="module">
-        const {createApp} = Vue
+        const { createApp } = Vue;
+
         const petstore = createApp({
-            data(){
-                return{
-                    sitename: "Vue.js Pet Depot",
+            data() {
+                return {
+                    sitename: 'Vue.js Pet Depot',
                     product: {
                         id: 1001,
-                        title: "Cat Food, 25lb bag",
-                        description: "A 25 pound bag of irresistible," + "organic goodness for your cat.",
+                        title: 'Cat Food, 25lb bag',
+                        description: 'A 25 pound bag of irresistible organic goodness for your cat.',
                         price: 2500,
-                        image: "images/catFood.jpg",
+                        image: 'catFood.jpg',
                         availableInventory: 5
                     },
-                    cart:[],   
+                    cart: []
+                };
+            },
+            computed: {
+                cartCount() {
+                    return this.cart.length;
+                },
+                cartTotal() {
+                    return this.cart.reduce((total, item) => total + this.product.price, 0);
                 }
             },
-            computed:{
-
-            },
-            methods:{
-                
+            methods: {
+                addToCart() {
+                    if (this.product.availableInventory > 0) {
+                        this.product.availableInventory -= 1;
+                        this.cart.push({ id: this.product.id });
+                    }
+                }
             }
-        })
-        petstore.mount('#app')
+        });
+
+        petstore.mount('#app');
     </script>
-    
 </body>
 </html>
