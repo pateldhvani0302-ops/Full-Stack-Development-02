@@ -57,6 +57,8 @@
 <body>
     <div id="app">
         <h1 v-text="sitename"></h1>
+        <p>{{ message }}</p>
+<button v-on:click="changeMessage">Click me</button>
         <div class="product-layout">
             <figure>
                 <img class="product-image" v-bind:src="product.image" alt="Product image">
@@ -92,7 +94,9 @@
                         image: 'catFood.jpg',
                         availableInventory: 3
                     },
-                    cart: []
+                    cart: [],
+                     message: 'Welcome to my pet shop!'  
+            
                 };
             },
             computed: {
@@ -103,7 +107,10 @@
                     return this.cart.reduce((total, item) => total + this.product.price, 0);
                 }
             },
-            methods: {
+            methods: 
+            { changeMessage() {
+    this.message = 'Thank you for visiting!';}
+},
                 addToCart() {
                     if (this.product.availableInventory > 0) {
                         this.product.availableInventory -= 1;
@@ -111,7 +118,7 @@
                     }
                 }
             }
-        });
+        );
 
         petstore.mount('#app');
     </script>
