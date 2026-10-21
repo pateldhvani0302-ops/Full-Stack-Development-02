@@ -57,6 +57,12 @@
 <body>
     <div id="app">
         <h1 v-text="sitename"></h1>
+        <label>
+    Your name:
+    <input type="text" v-model="customerName">
+</label>
+
+<p>Hello, {{ customerName }}!</p>
 <p v-show="showMessage">{{ message }}</p>
 <button v-on:click="showMessage = !showMessage">
     Show / hide message
@@ -99,7 +105,8 @@
                     },
                     cart: [],
                      message: 'Welcome to my pet shop!',
-                     showMessage: true  
+                     showMessage: false,
+                     customerName: ''  
             
                 };
             },
