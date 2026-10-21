@@ -57,7 +57,10 @@
 <body>
     <div id="app">
         <h1 v-text="sitename"></h1>
-        <p>{{ message }}</p>
+<p v-show="showMessage">{{ message }}</p>
+<button v-on:click="showMessage = !showMessage">
+    Show / hide message
+</button>
 <button v-on:click="changeMessage">Click me</button>
         <div class="product-layout">
             <figure>
@@ -95,7 +98,8 @@
                         availableInventory: 3
                     },
                     cart: [],
-                     message: 'Welcome to my pet shop!'  
+                     message: 'Welcome to my pet shop!',
+                     showMessage: true  
             
                 };
             },
